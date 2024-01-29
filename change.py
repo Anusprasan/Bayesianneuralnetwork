@@ -395,12 +395,22 @@ class Model(nn.Module):
                     p_dist = dist.Dirichlet(alpha0 * torch.ones_like(alpha))
                     kl_div = dist.kl_divergence(q_dist, p_dist).sum()
                     loss_kl += kl_div
+                    
+                    # It calculates the KL divergence between the Dirichlet prior (p_dist) and posterior (q_dist) for each paraAmeter.
+                    
+                    # KL divergence is computed if the parameter is not a bias parameter and the bias handling method is not 'uninformative'. All of the parameter tensor's elements are added together to get the KL divergence.
+                    
+                    # The loss_kl variable holds the total of each parameter's resulting KL divergence.
 
                 # Gradients
                 if eval_grad and p.grad is not None:
                     if not ('bias' in pname and bias == 'uninformative'):
                         p_m.grad = p.grad + kld*(p_m-p0)/alpha0/self.ND
                         p_s_.grad = p.grad*((p-p_m)/alpha) + kld*(alpha/alpha0-1/alpha)/self.ND
+                        
+                        # It computes gradients for the mean (p_m) and standard deviation (p_s_) parameters of the variational distribution if eval_grad is True, indicating that gradients must be computed.
+                        
+                        # Calculating gradients entails altering the gradients according to the KL divergence term. In this stage, gradients for the parameters of mean and standard deviation are updated.
 
         # Compute total loss
         loss = loss_nll + kld * loss_kl / self.ND
