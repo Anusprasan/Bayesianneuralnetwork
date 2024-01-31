@@ -1,0 +1,25 @@
+[00:32:20,673 INFO] Command :: demo_mnist.py --dataset mnist --backbone mlp_mnist --val_heldout 0.5 --method vi --hparams prior_sig=1.0,kld=1e-3,bias=informative,nst=5 --epochs 100 --lr 1e-2 --batch_size 128 --momentum 0.5
+
+[00:32:20,675 INFO] Preparing data...
+[00:32:20,774 INFO] Creating an underlying backbone network (skeleton)...
+[00:32:20,809 INFO] Total params in the backbone: 2.80M
+[00:32:20,811 INFO] Backbone modules:
+layers.0.weight -- shape = [1000, 784], #params = 784000
+layers.0.bias -- shape = [1000], #params = 1000
+layers.2.weight -- shape = [1000, 1000], #params = 1000000
+layers.2.bias -- shape = [1000], #params = 1000
+layers.4.weight -- shape = [1000, 1000], #params = 1000000
+layers.4.bias -- shape = [1000], #params = 1000
+classifier.weight -- shape = [10, 1000], #params = 10000
+classifier.bias -- shape = [10], #params = 10
+
+[00:32:20,814 INFO] No pretrained backbone network provided.
+[00:32:22,293 INFO] Start training...
+[00:32:22,347 INFO] [Epoch -1/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[00:34:04,655 INFO] [Epoch 0/100] Training summary: loss = 79639810.4747 (nll = 79639810.4747, kl = 0.0000), prediction error = 0.9012 (time: 102.3081 seconds)
+[00:34:04,716 INFO] [Epoch 0/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[00:40:46,615 INFO] (Epoch 0) Validation summary: loss = 18857070.8533, prediction error = 0.8985 (time: 401.8982 seconds)
+[00:43:01,353 INFO] (Epoch 0) Test summary: loss = 19347180.3312, prediction error = 0.9003 (time: 134.7363 seconds)
+[00:43:01,354 INFO] Best evaluation loss so far! @epoch 0: loss = 18857070.85333333
+[00:43:01,358 INFO] Logits on val set saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_003220\logits_val.pkl
+[00:43:01,363 INFO] Logits on test set saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_003220\logits_test.pkl

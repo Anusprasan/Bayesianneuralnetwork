@@ -1,0 +1,16 @@
+[11:26:01,440 INFO] Command :: demo_mnist.py --dataset mnist --backbone mlp_mnist --val_heldout 0.5 --method vi --hparams prior_sig=1.0,kld=1e-3,bias=informative,nst=5 --epochs 100 --lr 1e-2 --batch_size 128 --momentum 0.5
+
+[11:26:01,456 INFO] Preparing data...
+[11:27:44,877 INFO] Creating an underlying backbone network (skeleton)...
+[11:27:44,930 INFO] Total params in the backbone: 2.80M
+[11:27:44,930 INFO] Backbone modules:
+layers.0.weight -- shape = [1000, 784], #params = 784000
+layers.0.bias -- shape = [1000], #params = 1000
+layers.2.weight -- shape = [1000, 1000], #params = 1000000
+layers.2.bias -- shape = [1000], #params = 1000
+layers.4.weight -- shape = [1000, 1000], #params = 1000000
+layers.4.bias -- shape = [1000], #params = 1000
+classifier.weight -- shape = [10, 1000], #params = 10000
+classifier.bias -- shape = [10], #params = 10
+
+[11:27:44,930 INFO] No pretrained backbone network provided.

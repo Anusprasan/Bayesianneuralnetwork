@@ -1,0 +1,63 @@
+[00:52:03,721 INFO] Command :: demo_mnist.py --dataset mnist --backbone mlp_mnist --val_heldout 0.5 --method vi --hparams prior_sig=1.0,kld=1e-3,bias=informative,nst=5 --epochs 100 --lr 1e-2 --batch_size 128 --momentum 0.5
+
+[00:52:03,722 INFO] Preparing data...
+[00:52:03,839 INFO] Creating an underlying backbone network (skeleton)...
+[00:52:03,863 INFO] Total params in the backbone: 2.80M
+[00:52:03,869 INFO] Backbone modules:
+layers.0.weight -- shape = [1000, 784], #params = 784000
+layers.0.bias -- shape = [1000], #params = 1000
+layers.2.weight -- shape = [1000, 1000], #params = 1000000
+layers.2.bias -- shape = [1000], #params = 1000
+layers.4.weight -- shape = [1000, 1000], #params = 1000000
+layers.4.bias -- shape = [1000], #params = 1000
+classifier.weight -- shape = [10, 1000], #params = 10000
+classifier.bias -- shape = [10], #params = 10
+
+[00:52:03,872 INFO] No pretrained backbone network provided.
+[00:52:04,854 INFO] Start training...
+[00:52:04,906 INFO] [Epoch -1/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[00:53:46,552 INFO] [Epoch 0/100] Training summary: loss = 79639810.4747 (nll = 79639810.4747, kl = 0.0000), prediction error = 0.9012 (time: 101.6450 seconds)
+[00:53:46,598 INFO] [Epoch 0/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[01:00:24,618 INFO] (Epoch 0) Validation summary: loss = 18857070.8533, prediction error = 0.8985 (time: 398.0133 seconds)
+[01:02:38,512 INFO] (Epoch 0) Test summary: loss = 19347180.3312, prediction error = 0.9003 (time: 133.8901 seconds)
+[01:02:38,512 INFO] Best evaluation loss so far! @epoch 0: loss = 18857070.85333333
+[01:02:38,518 INFO] Logits on val set saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_005203\logits_val.pkl
+[01:02:38,519 INFO] Logits on test set saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_005203\logits_test.pkl
+[01:02:38,559 INFO] Checkpoint saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_005203\ckpt.pt
+[01:02:40,201 INFO] [Calibration - Default T=1] ECE = 0.1208, MCE = 0.6984, NLL = 19347180.0000
+[01:15:49,821 INFO] [Calibration - Temp-scaled Topt=1721507.3920] ECE = 0.0565, MCE = 0.3605, NLL = 13.0757
+[07:42:35,678 INFO] [Epoch 1/100] Training summary: loss = 80908076.9376 (nll = 80908076.9376, kl = 0.0000), prediction error = 0.9017 (time: 23205.8551 seconds)
+[07:42:35,747 INFO] [Epoch 1/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[07:54:10,361 INFO] (Epoch 1) Validation summary: loss = 19319356.5525, prediction error = 0.8991 (time: 694.6136 seconds)
+[07:58:04,497 INFO] (Epoch 1) Test summary: loss = 21333408.2480, prediction error = 0.9064 (time: 234.1367 seconds)
+[08:00:43,893 INFO] [Epoch 2/100] Training summary: loss = 78378943.0784 (nll = 78378943.0784, kl = 0.0000), prediction error = 0.9039 (time: 159.3953 seconds)
+[08:00:43,964 INFO] [Epoch 2/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[10:13:07,219 INFO] (Epoch 2) Validation summary: loss = 20061834.2293, prediction error = 0.8984 (time: 7943.2476 seconds)
+[10:16:46,982 INFO] (Epoch 2) Test summary: loss = 21088006.6752, prediction error = 0.8998 (time: 219.7626 seconds)
+[10:19:28,210 INFO] [Epoch 3/100] Training summary: loss = 77853967.7397 (nll = 77853967.7397, kl = 0.0000), prediction error = 0.9011 (time: 161.2283 seconds)
+[10:19:28,268 INFO] [Epoch 3/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[10:31:16,787 INFO] (Epoch 3) Validation summary: loss = 19477380.5680, prediction error = 0.9028 (time: 708.5191 seconds)
+[10:35:13,397 INFO] (Epoch 3) Test summary: loss = 20523967.0112, prediction error = 0.8958 (time: 236.6084 seconds)
+[10:37:51,753 INFO] [Epoch 4/100] Training summary: loss = 80003912.0725 (nll = 80003912.0725, kl = 0.0000), prediction error = 0.8997 (time: 158.3562 seconds)
+[10:37:51,815 INFO] [Epoch 4/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[10:49:42,957 INFO] (Epoch 4) Validation summary: loss = 19502253.9403, prediction error = 0.9018 (time: 711.1425 seconds)
+[10:53:44,181 INFO] (Epoch 4) Test summary: loss = 21214612.5696, prediction error = 0.8993 (time: 241.2229 seconds)
+[10:56:33,967 INFO] [Epoch 5/100] Training summary: loss = 81664706.7627 (nll = 81664706.7627, kl = 0.0000), prediction error = 0.9002 (time: 169.7856 seconds)
+[10:56:34,040 INFO] [Epoch 5/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[11:08:19,639 INFO] (Epoch 5) Validation summary: loss = 19695044.4891, prediction error = 0.8985 (time: 705.5987 seconds)
+[11:12:06,934 INFO] (Epoch 5) Test summary: loss = 21493507.2032, prediction error = 0.8957 (time: 227.2953 seconds)
+[11:14:41,421 INFO] [Epoch 6/100] Training summary: loss = 77426023.1872 (nll = 77426023.1872, kl = 0.0000), prediction error = 0.9003 (time: 154.4865 seconds)
+[11:14:41,486 INFO] [Epoch 6/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[11:25:59,623 INFO] (Epoch 6) Validation summary: loss = 18961330.8747, prediction error = 0.9010 (time: 678.1377 seconds)
+[11:29:52,611 INFO] (Epoch 6) Test summary: loss = 21158856.0464, prediction error = 0.9021 (time: 232.9870 seconds)
+[11:32:33,152 INFO] [Epoch 7/100] Training summary: loss = 79516797.6128 (nll = 79516797.6128, kl = 0.0000), prediction error = 0.8996 (time: 160.5415 seconds)
+[11:32:33,211 INFO] [Epoch 7/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[11:44:11,442 INFO] (Epoch 7) Validation summary: loss = 19479373.4731, prediction error = 0.9010 (time: 698.2298 seconds)
+[11:48:08,531 INFO] (Epoch 7) Test summary: loss = 20221717.6480, prediction error = 0.8982 (time: 237.0888 seconds)
+[11:50:51,736 INFO] [Epoch 8/100] Training summary: loss = 76599909.6491 (nll = 76599909.6491, kl = 0.0000), prediction error = 0.9001 (time: 163.2048 seconds)
+[11:50:51,801 INFO] [Epoch 8/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[12:02:28,627 INFO] (Epoch 8) Validation summary: loss = 19602194.2048, prediction error = 0.8994 (time: 696.8243 seconds)
+[12:06:22,156 INFO] (Epoch 8) Test summary: loss = 20748111.3328, prediction error = 0.8980 (time: 233.5290 seconds)
+[12:08:54,626 INFO] [Epoch 9/100] Training summary: loss = 77064474.4256 (nll = 77064474.4256, kl = 0.0000), prediction error = 0.9017 (time: 152.4703 seconds)
+[12:08:54,696 INFO] [Epoch 9/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[12:16:13,469 INFO] (Epoch 9) Validation summary: loss = 19723139.4357, prediction error = 0.9006 (time: 438.7727 seconds)
