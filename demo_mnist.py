@@ -17,15 +17,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # method and hparams
-    parser.add_argument('--method', type=str, default='mc_dropout', help='approximate posterior inference method')
-    parser.add_argument('--hparams', type=str, default='', help='all hparams specific to the method (comma-separated, =-assigned forms)')
+    parser.add_argument('--method', type=str, default='vi', help='approximate posterior inference method')
+    parser.add_argument('--hparams', type=str, default='prior_sig=1.0,kld=1e-3,bias=informative,nst=5', help='all hparams specific to the method (comma-separated, =-assigned forms)')
 
     # finetuning of pretrained model or training from the scratch (None)
     parser.add_argument('--pretrained', type=str, default=None, help='path or url to the pretrained model')
 
     # dataset and backbone network
     parser.add_argument('--dataset', type=str, default='mnist', help='dataset name')
-    parser.add_argument('--backbone', type=str, default='mlp', help='backbone name')
+    parser.add_argument('--backbone', type=str, default='ViT_Small', help='backbone name')
     parser.add_argument('--val_heldout', type=float, default=0.1, help='validation set heldout proportion')
 
     # error calibration

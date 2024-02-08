@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 
-import bayesdll.calibration as calibration
+import calibration
 
 
 class Runner:
@@ -42,11 +42,13 @@ class Runner:
         hparams = args.hparams
         self.model = Model(
             self.net if args.pretrained is None else self.net0,  # used as init for m (random init if not pretrained, or pretrained otherwise)
-            ND=args.ND, prior_sig=float(hparams['prior_sig']), bias=str(hparams['bias'])
+            ND=args.ND, prior_alpha=float(hparams['prior_sig']), bias=str(hparams['bias'])
         ).to(args.device)
 
         # create optimizer
         # self.optimizer = torch.optim.SGD(
+            
+            
         #     self.model.parameters(), 
         #     lr = args.lr, momentum = args.momentum, weight_decay = 0
         # )
@@ -311,7 +313,7 @@ class Runner:
         torch.save(
             {
                 'model': self.model.state_dict(), 
-                'prior_sig': self.model.prior_sig, 
+                'prior_alpha': self.model.prior_alpha, 
                 'optimizer': self.optimizer.state_dict(),
                 'epoch': epoch, 
             },
@@ -332,114 +334,89 @@ class Runner:
         return ckpt['epoch']
 
 
+import torch.distributions as dist
+
 class Model(nn.Module):
 
-    '''
-    Variational inference model.
-
-    Represents q(theta) = N(theta; m, Diag(v)) where v = s^2 (s = clamp(s_,min=1e-8)).
-    '''
-
-    def __init__(self, net, ND, prior_sig=1.0, bias='informative'):
-
-        '''
-        Args:
-            net = either pretrained or random init backbone (init for m)
-            ND = training data size
-            prior_sig = prior Gaussian sigma
-            bias = how to treat bias parameters:
-                "informative": -- the same treatment as weights
-                "uninformative": uninformative bias prior
-        '''
-
+    def __init__(self, net, ND, prior_alpha=1.0, bias='informative'):
         super().__init__()
 
-        # create networks for vi params "m" and "s_"
         self.m = copy.deepcopy(net)
         self.s_ = copy.deepcopy(net)
 
-        # initialize s_
+        # Initialize parameters for the Dirichlet distribution
+        self.prior_alpha = prior_alpha
+
         with torch.no_grad():
             for param in self.s_.parameters():
-                param.copy_((1e-6)*torch.ones_like(param))  # small value
+                # Initialize s_ with ones (equivalent to initializing with uniform distribution)
+                param.copy_(torch.ones_like(param))
 
         self.ND = ND
-        self.prior_sig = prior_sig
         self.bias = bias
 
-    
     def _retrieve_s(self):
-        
         s = copy.deepcopy(self.s_)
         with torch.no_grad():
             for psrc, ptgt in zip(self.s_.parameters(), s.parameters()):
                 ptgt.copy_(psrc.clamp(min=1e-8))
-
         return s
 
-        
     def forward(self, x, y, net, net0, criterion, kld=1.0, eval_grad=0):
-
-        '''
-        Evaluate minibatch -ELBO loss for a given a batch.
-
-        Args:
-            x, y = batch input, output
-            net = workhorse network (its parameters will be filled in)
-            net0 = prior mean parameters
-            criterion = loss function
-            kld = kl discount factor (to factor in data augmentation)
-
-        Returns:
-            loss = -ELBO on the batch; scalar
-            out = class prediction on the batch
-            loss_nll = nll part of -ELBO
-            loss_kl = kl part of -ELBO
-        '''
-
         bias = self.bias
 
-        # sample theta ~ q(theta), ie, theta = m + eps*s, eps~N(0,I)
+        # Sample theta from the Dirichlet posterior
         with torch.no_grad():
             for p, p_m, p_s_ in zip(net.parameters(), self.m.parameters(), self.s_.parameters()):
-                eps = torch.randn_like(p)
-                p.copy_(p_m + p_s_.clamp(min=1e-8)*eps)
+                eps = torch.rand_like(p)  # Sample from uniform distribution for Dirichlet
+                p.copy_(p_m + p_s_.clamp(min=1e-8) * eps)
 
-        # fwd pass with theta
-        if eval_grad==0:
+        # Forward pass with sampled theta
+        if eval_grad == 0:
             with torch.no_grad():
                 out = net(x)
         else:
             out = net(x)
 
-        # evaluate nll loss
+        # Calculate negative log-likelihood (NLL) loss
         loss_nll = criterion(out, y)
 
-        # gradient d{loss_nll}/d{theta}
-        if eval_grad:
-            net.zero_grad()
-            loss_nll.backward()
-
-        # evaluate kl loss (before scaled by 1/ND), and also compute the total loss gradient
+        # Compute KL divergence between Dirichlet posterior and Dirichlet prior
         loss_kl = 0.
         with torch.no_grad():
             for (pname, p), p0, p_m, p_s_ in zip(net.named_parameters(), net0.parameters(), self.m.parameters(), self.s_.parameters()):
                 
-                # kl
+                # KL divergence calculation
                 if not ('bias' in pname and bias == 'uninformative'):
                     d = p.numel()
-                    sig2 = self.prior_sig**2
-                    s = p_s_.clamp(min=1e-8)
-                    v = s**2
-                    loss_kl += 0.5 * ( (((p_m-p0)**2+v)/sig2).sum() - (v/sig2).log().sum() - d )
+                    alpha0 = self.prior_alpha
+                    alpha = p_s_.clamp(min=1e-8)
+                    q_dist = dist.Dirichlet(alpha)
+                    p_dist = dist.Dirichlet(alpha0 * torch.ones_like(alpha))
+                    kl_div = dist.kl_divergence(q_dist, p_dist).sum()
+                    loss_kl += kl_div
+                    
+                     
+                    # It calculates the KL divergence between the Dirichlet prior (p_dist) and posterior (q_dist) for each paraAmeter.
+                    
+                    # KL divergence is computed if the parameter is not a bias parameter and the bias handling method is not 'uninformative'. All of the parameter tensor's elements are added together to get the KL divergence.
+                    
+                    # The loss_kl variable holds the total of each parameter's resulting KL divergence.
 
-                # gradients
+                # Gradients
+
+                # Gradients
                 if eval_grad and p.grad is not None:
                     if not ('bias' in pname and bias == 'uninformative'):
-                        p_m.grad = p.grad + kld*(p_m-p0)/sig2/self.ND
-                        p_s_.grad = p.grad*((p-p_m)/s) + kld*(s/sig2-1/s)/self.ND
+                        p_m.grad = p.grad + kld*(p_m-p0)/alpha0/self.ND
+                        p_s_.grad = p.grad*((p-p_m)/alpha) + kld*(alpha/alpha0-1/alpha)/self.ND
+                        
+                          # It computes gradients for the mean (p_m) and standard deviation (p_s_) parameters of the variational distribution if eval_grad is True, indicating that gradients must be computed.
+                        
+                        # Calculating gradients entails altering the gradients according to the KL divergence term. In this stage, gradients for the parameters of mean and standard deviation are updated.
 
-        loss = loss_nll + kld*loss_kl/self.ND
+
+        # Compute total loss
+        loss = loss_nll + kld * loss_kl / self.ND
 
         return loss.item(), out.detach(), loss_nll.item(), loss_kl.item()
-

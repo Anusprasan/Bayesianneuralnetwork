@@ -1,0 +1,27 @@
+[23:21:08,388 INFO] Command :: demo_mnist.py --dataset mnist --backbone mlp_mnist --val_heldout 0.5 --method vi --hparams prior_sig=1.0,kld=1e-3,bias=informative,nst=5 --epochs 100 --lr 1e-2 --batch_size 128 --momentum 0.5
+
+[23:21:08,388 INFO] Preparing data...
+[23:21:08,712 INFO] Creating an underlying backbone network (skeleton)...
+[23:21:08,747 INFO] Total params in the backbone: 2.80M
+[23:21:08,747 INFO] Backbone modules:
+layers.0.weight -- shape = [1000, 784], #params = 784000
+layers.0.bias -- shape = [1000], #params = 1000
+layers.2.weight -- shape = [1000, 1000], #params = 1000000
+layers.2.bias -- shape = [1000], #params = 1000
+layers.4.weight -- shape = [1000, 1000], #params = 1000000
+layers.4.bias -- shape = [1000], #params = 1000
+classifier.weight -- shape = [10, 1000], #params = 10000
+classifier.bias -- shape = [10], #params = 10
+
+[23:21:08,747 INFO] No pretrained backbone network provided.
+[23:21:12,056 INFO] Start training...
+[23:21:12,145 INFO] [Epoch -1/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[23:22:45,607 INFO] [Epoch 0/100] Training summary: loss = 79639810.4747 (nll = 79639810.4747, kl = 0.0000), prediction error = 0.9012 (time: 93.4614 seconds)
+[23:22:45,654 INFO] [Epoch 0/100] s (= std(q)) mean = 1.00000000, min = 1.00000000, max = 1.00000000
+[23:29:15,488 INFO] (Epoch 0) Validation summary: loss = 18857070.8533, prediction error = 0.8985 (time: 389.8335 seconds)
+[23:31:26,532 INFO] (Epoch 0) Test summary: loss = 19347180.3312, prediction error = 0.9003 (time: 131.0438 seconds)
+[23:31:26,532 INFO] Best evaluation loss so far! @epoch 0: loss = 18857070.85333333
+[23:31:26,532 INFO] Logits on val set saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_232108\logits_val.pkl
+[23:31:26,543 INFO] Logits on test set saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_232108\logits_test.pkl
+[23:31:26,578 INFO] Checkpoint saved at results\mnist_val_heldout0.5/mlp_mnist/vi_prior_sig=1.0_kld=1e-3_bias=informative_nst=5_pretr0/ep100_bs128_lr0.01_mo0.5/seed42_2024_0131_232108\ckpt.pt
+[23:31:27,927 INFO] [Calibration - Default T=1] ECE = 0.1208, MCE = 0.6984, NLL = 19347180.0000
