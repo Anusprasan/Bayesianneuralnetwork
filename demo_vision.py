@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--hparams', type=str, default='prior_sig=1.0,kld=1e-3,bias=informative,nst=5', help='all hparams specific to the method (comma-separated, =-assigned forms)')
 
     # finetuning of pretrained model or training from the scratch (None)
-    parser.add_argument('--pretrained', type=str, default=None, help='path or url to the pretrained model')
+    parser.add_argument('--pretrained', type=str, default='IMAGENET1K_V1', help='path or url to the pretrained model')
 
     # dataset and backbone network
     parser.add_argument('--dataset', type=str, default='pets', help='dataset name')
