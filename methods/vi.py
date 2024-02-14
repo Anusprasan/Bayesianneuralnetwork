@@ -42,7 +42,7 @@ class Runner:
         hparams = args.hparams
         self.model = Model(
             self.net if args.pretrained is None else self.net0,  # used as init for m (random init if not pretrained, or pretrained otherwise)
-            ND=args.ND, prior_alpha=float(hparams['prior_sig']), bias=str(hparams['bias'])
+            ND=args.ND, prior_alpha=float(hparams['prior_alpha']), bias=str(hparams['bias'])
         ).to(args.device)
 
         # create optimizer
