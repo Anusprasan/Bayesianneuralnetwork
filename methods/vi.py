@@ -69,7 +69,7 @@ class Runner:
 
 
     def train(self, train_loader, val_loader, test_loader):
-
+        print("Anush")
         args = self.args
         logger = self.logger
 
@@ -288,6 +288,12 @@ class Runner:
         targets = np.concatenate(targets, axis=0)
         logits = np.concatenate(logits, axis=0)
         logits_all = np.concatenate(logits_all, axis=0)
+        predicted_classes = np.argmax(logits_all, axis=1)  # Get the index of the max logit as prediction
+        breakpoint()
+        correct_predictions = np.sum(predicted_classes== targets)  # Count the number of correct predictions
+        total_samples = len(targets)
+        accuracy = correct_predictions / total_samples  # Calculate accuracy
+        print("Accuracy:", accuracy)
 
         return loss/nb_samples, error/nb_samples, targets, logits, logits_all
 
