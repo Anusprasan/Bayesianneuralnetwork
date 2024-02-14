@@ -328,7 +328,7 @@ class Runner:
         ckpt = torch.load(ckpt_path, map_location=self.args.device)
         
         self.model.load_state_dict(ckpt['model'])
-        self.model.prior_sig = ckpt['prior_sig']
+        self.model.prior_alpha = ckpt['prior_alpha']
         self.optimizer.load_state_dict(ckpt['optimizer'])
 
         return ckpt['epoch']
