@@ -17,14 +17,14 @@ if __name__ == '__main__':
 
     # method and hparams
     parser.add_argument('--method', type=str, default='vi', help='approximate posterior inference method')
-    parser.add_argument('--hparams', type=str, default='prior_sig=1.0,kld=1e-3,bias=informative,nst=5', help='all hparams specific to the method (comma-separated, =-assigned forms)')
+    parser.add_argument('--hparams', type=str, default='prior_alpha=1.0,kld=1e-3,bias=informative,nst=5', help='all hparams specific to the method (comma-separated, =-assigned forms)')
 
     # finetuning of pretrained model or training from the scratch (None)
     parser.add_argument('--pretrained', type=str, default='IMAGENET1K_V1', help='path or url to the pretrained model')
 
     # dataset and backbone network
     parser.add_argument('--dataset', type=str, default='pets', help='dataset name')
-    parser.add_argument('--backbone', type=str, default='vit_l_32', help='backbone name')
+    parser.add_argument('--backbone', type=str, default='resnet18', help='backbone name')
     parser.add_argument('--val_heldout', type=float, default=0.1, help='validation set heldout proportion')
 
     # error calibration
