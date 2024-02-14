@@ -1,3 +1,4 @@
+
 import os
 import copy
 import time
@@ -70,6 +71,7 @@ class Runner:
 
     def train(self, train_loader, val_loader, test_loader):
         print("Anush")
+        self.evaluate(val_loader)
         args = self.args
         logger = self.logger
 
@@ -120,7 +122,7 @@ class Runner:
                 if val_loader is not None:
                     tic = time.time()
                     losses_val[ep], errors_val[ep], targets_val, logits_val, logits_all_val = \
-                        self.evaluate(val_loader)
+                    self.evaluate(val_loader)
                     toc = time.time()
                     prn_str = f'(Epoch {ep}) Validation summary: '
                     prn_str += 'loss = %.4f, prediction error = %.4f ' % (losses_val[ep], errors_val[ep])
@@ -246,8 +248,12 @@ class Runner:
         self.net.eval()
         
         loss, error, nb_samples, targets, logits, logits_all = 0, 0, 0, [], [], []
+        counter=0
         with tqdm(test_loader, unit="batch") as tepoch:
             for x, y in tepoch:
+                counter+=1
+                if counter>2:
+                    break
 
                 x, y = x.to(args.device), y.to(args.device)
 
